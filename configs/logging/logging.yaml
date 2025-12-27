@@ -1,0 +1,12 @@
+label: mlflow
+
+# Wandb
+project: rice_type_image_detection
+name: vit-image-classifier
+save_dir: "."
+
+# MLFlow
+experiment_name: rice_type_image_detection
+run_name: vit-image-classifier
+mlflow_save_dir: "mlflowruns"
+tracking_uri: http://127.0.0.1:8080

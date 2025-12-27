@@ -1,0 +1,5 @@
+data_path:
+  - data/data/images
+  - data/data_refined/RiceRefined-v2
+labels2id_meta: data/labels_metainfo/labels2id_metainfo.json
+id2labels_meta: data/labels_metainfo/id2labels_metainfo.json
