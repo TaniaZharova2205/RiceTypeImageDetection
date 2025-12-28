@@ -21,4 +21,4 @@ fi
 cp -a $IMAGES_PATH/. triton/images/
 
 cd triton
-docker compose -p $NETWORK_NAME up -d
+docker-compose -p $NETWORK_NAME up -d

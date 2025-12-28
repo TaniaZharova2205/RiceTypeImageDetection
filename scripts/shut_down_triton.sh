@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-docker compose -p $NETWORK_NAME down
+docker-compose -p $NETWORK_NAME down

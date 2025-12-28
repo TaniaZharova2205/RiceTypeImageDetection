@@ -119,6 +119,7 @@ class ViTDataModule(pl.LightningDataModule):
 
     def prepare_data(self):
         try:
+            print(self._data_dir)
             for data_path in self._data_dir:
                 ensure_data_unpacked(data_path)
         except Exception:
