@@ -100,9 +100,7 @@ class Module(pl.LightningModule):
         return self.model(pixel_values=x).logits
 
     @staticmethod
-    def visualize(
-            title: str, label: str, losses: list[float], to_save: Path
-    ) -> None:
+    def visualize(title: str, label: str, losses: list[float], to_save: Path) -> None:
         plt.figure()
         plt.plot(losses, label=label)
         plt.xlabel("Epoch")

@@ -8,3 +8,4 @@ data/
 lightning_logs/
 mlruns/
 .idea
+.env
