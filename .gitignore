@@ -1,0 +1,10 @@
+models/
+*.ckpt
+*.pth
+__pycache__/
+*.pyc
+data/
+*.csv
+lightning_logs/
+mlruns/
+.idea
