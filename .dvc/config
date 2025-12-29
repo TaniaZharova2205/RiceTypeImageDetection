@@ -1,0 +1,4 @@
+[core]
+    remote = rice_type_image_detection_data
+['remote "rice_type_image_detection_data"']
+    url = ../data
