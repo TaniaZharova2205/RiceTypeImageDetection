@@ -13,7 +13,9 @@ from utilities.model_getter import get_processor
 def main(url: str, images_to_analyze: Path):
     with initialize(config_path="../configs", version_base="1.1"):
         config = compose(config_name="config")
-        with open(config["data_loading"]["id2labels_meta"]) as labels_meta_file:
+        with open(
+            config["data_loading"]["id2labels_meta"]
+        ) as labels_meta_file:
             class_names = json.load(labels_meta_file)
         client = httpclient.InferenceServerClient(url=url)
 
@@ -23,12 +25,16 @@ def main(url: str, images_to_analyze: Path):
             image = Image.open(image_path).convert("RGB")
             inputs = processor(images=image, return_tensors="pt")
             input_data = inputs["pixel_values"].numpy().astype(np.float32)
-            inputs = httpclient.InferInput("pixel_values", input_data.shape, "FP32")
+            inputs = httpclient.InferInput(
+                "pixel_values", input_data.shape, "FP32"
+            )
             inputs.set_data_from_numpy(input_data)
 
             outputs = [httpclient.InferRequestedOutput("logits")]
             response = client.infer(
-                model_name="rice_type_image_detection", inputs=[inputs], outputs=outputs
+                model_name="rice_type_image_detection",
+                inputs=[inputs],
+                outputs=outputs,
             )
 
             result = response.as_numpy("logits")

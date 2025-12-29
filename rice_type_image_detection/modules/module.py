@@ -45,7 +45,9 @@ class Module(pl.LightningModule):
                 task="multiclass", num_classes=self.num_labels
             )
             self.train_f1score = torchmetrics.F1Score(
-                task="multiclass", num_classes=self.num_labels, average="weighted"
+                task="multiclass",
+                num_classes=self.num_labels,
+                average="weighted",
             )
             self.val_losses = []
             self.val_accuracies = []
@@ -54,14 +56,17 @@ class Module(pl.LightningModule):
                 task="multiclass", num_classes=self.num_labels
             )
             self.val_f1score = torchmetrics.F1Score(
-                task="multiclass", num_classes=self.num_labels, average="weighted"
+                task="multiclass",
+                num_classes=self.num_labels,
+                average="weighted",
             )
             self.num_epochs = train_parameters["num_epochs"]
             self.num_training_steps = self.num_epochs * len(
                 datamodule.train_dataloader()
             )
             self.num_warmup_steps = int(
-                train_parameters["num_warmup_steps_ratio"] * self.num_training_steps
+                train_parameters["num_warmup_steps_ratio"]
+                * self.num_training_steps
             )
             self.batch_size = train_parameters["batch_size"]
             self.save_custom_parameters()
@@ -70,7 +75,9 @@ class Module(pl.LightningModule):
                 task="multiclass", num_classes=self.num_labels
             )
             self.test_f1score = torchmetrics.F1Score(
-                task="multiclass", num_classes=self.num_labels, average="weighted"
+                task="multiclass",
+                num_classes=self.num_labels,
+                average="weighted",
             )
         self.datamodule = datamodule
 
@@ -100,7 +107,9 @@ class Module(pl.LightningModule):
         return self.model(pixel_values=x).logits
 
     @staticmethod
-    def visualize(title: str, label: str, losses: list[float], to_save: Path) -> None:
+    def visualize(
+        title: str, label: str, losses: list[float], to_save: Path
+    ) -> None:
         plt.figure()
         plt.plot(losses, label=label)
         plt.xlabel("Epoch")
@@ -129,7 +138,9 @@ class Module(pl.LightningModule):
         self.train_accuracies.append(self.train_accuracy.compute().item())
         self.train_f1scores.append(self.train_f1score.compute().item())
 
-        self.log("train_loss", loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log(
+            "train_loss", loss, prog_bar=True, on_step=False, on_epoch=True
+        )
         self.log(
             "train_accuracy",
             self.train_accuracy,
@@ -164,7 +175,11 @@ class Module(pl.LightningModule):
             on_epoch=True,
         )
         self.log(
-            "val_f1score", self.val_f1score, prog_bar=True, on_step=False, on_epoch=True
+            "val_f1score",
+            self.val_f1score,
+            prog_bar=True,
+            on_step=False,
+            on_epoch=True,
         )
         return {
             "val_loss": loss,
@@ -174,7 +189,8 @@ class Module(pl.LightningModule):
 
     def on_train_end(self):
         plots_path = (
-            Path(self._log_parameters["all_logs"]) / self._log_parameters["plots_path"]
+            Path(self._log_parameters["all_logs"])
+            / self._log_parameters["plots_path"]
         )
         Path(plots_path).mkdir(parents=True, exist_ok=True)
         self.visualize(
@@ -198,11 +214,15 @@ class Module(pl.LightningModule):
 
     def on_validation_end(self):
         plots_path = (
-            Path(self._log_parameters["all_logs"]) / self._log_parameters["plots_path"]
+            Path(self._log_parameters["all_logs"])
+            / self._log_parameters["plots_path"]
         )
         Path(plots_path).mkdir(parents=True, exist_ok=True)
         self.visualize(
-            "Val loss", "Val loss", self.val_losses, Path(plots_path) / "val_loss.png"
+            "Val loss",
+            "Val loss",
+            self.val_losses,
+            Path(plots_path) / "val_loss.png",
         )
         self.visualize(
             "Val accuracy",
@@ -236,7 +256,10 @@ class Module(pl.LightningModule):
             on_step=False,
             on_epoch=True,
         )
-        return {"test_accuracy": self.test_accuracy, "test_f1score": self.test_f1score}
+        return {
+            "test_accuracy": self.test_accuracy,
+            "test_f1score": self.test_f1score,
+        }
 
     def predict_step(
         self, batch: tp.Any, batch_idx: int, dataloader_idx: int = 0

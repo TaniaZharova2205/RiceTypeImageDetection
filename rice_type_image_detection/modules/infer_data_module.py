@@ -56,7 +56,9 @@ class InferDataModule(pl.LightningDataModule):
         self.num_workers = config["training"]["num_workers"]
 
         self._seed = config["training"]["seed"]
-        self._generator = torch.Generator().manual_seed(config["training"]["seed"])
+        self._generator = torch.Generator().manual_seed(
+            config["training"]["seed"]
+        )
 
     @staticmethod
     def ensure_data_downloaded(data_path: Path):
@@ -68,8 +70,12 @@ class InferDataModule(pl.LightningDataModule):
         self.ensure_data_downloaded(self._data_dir)
         if not Path(self._data_dir).is_dir():
             raise Exception("For inference a directory should be passed")
-        self.ensure_data_downloaded(self._config["data_loading"]["labels2id_meta"])
-        self.ensure_data_downloaded(self._config["data_loading"]["id2labels_meta"])
+        self.ensure_data_downloaded(
+            self._config["data_loading"]["labels2id_meta"]
+        )
+        self.ensure_data_downloaded(
+            self._config["data_loading"]["id2labels_meta"]
+        )
 
     def setup(self, stage: tp.Optional[str] = None):
         self._num_labels = self._config["model"]["num_labels"]
@@ -83,5 +89,8 @@ class InferDataModule(pl.LightningDataModule):
 
     def predict_dataloader(self) -> torch.utils.data.DataLoader:
         return DataLoader(
-            self.dataset, batch_size=1, shuffle=False, num_workers=self.num_workers
+            self.dataset,
+            batch_size=1,
+            shuffle=False,
+            num_workers=self.num_workers,
         )

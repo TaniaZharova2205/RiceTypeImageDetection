@@ -2,7 +2,6 @@ import pytorch_lightning as pl
 import torch
 from transformers import ViTForImageClassification, ViTImageProcessor
 
-
 MODEL_SOURCE = "google/vit-base-patch16-224-in21k"
 
 

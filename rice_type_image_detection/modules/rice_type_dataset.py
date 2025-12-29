@@ -59,9 +59,13 @@ class RiceTypeDataset(Dataset):
         transform: transforms.Compose,
         randomize: bool = True,
     ) -> "RiceTypeDataset":
-        df, labels = RiceTypeDataset.get_dataframe_from_dir(data_dirs, num_labels)
+        df, labels = RiceTypeDataset.get_dataframe_from_dir(
+            data_dirs, num_labels
+        )
         result = cls(
-            RiceTypeDataset.get_dataset_from_dataframe(df, labels, randomize, seed),
+            RiceTypeDataset.get_dataset_from_dataframe(
+                df, labels, randomize, seed
+            ),
             processor,
             transform,
         )
@@ -94,7 +98,9 @@ class RiceTypeDataset(Dataset):
                     labels.append(label)
         df = pd.DataFrame.from_dict({"image": file_names, "label": labels})
 
-        df = df[df["label"].isin(df["label"].value_counts().head(num_labels).index)]
+        df = df[
+            df["label"].isin(df["label"].value_counts().head(num_labels).index)
+        ]
         labels = sorted(list(set(df["label"])))
         redundant_labels_dict = {
             "Norwegian Forest Cat": "Norwegian Forest",
@@ -107,8 +113,12 @@ class RiceTypeDataset(Dataset):
         return df, labels
 
     @staticmethod
-    def get_dataset_from_dataframe(df, labels_list: list, randomize: bool, seed: int):
-        classLabels = ClassLabel(num_classes=len(labels_list), names=labels_list)
+    def get_dataset_from_dataframe(
+        df, labels_list: list, randomize: bool, seed: int
+    ):
+        classLabels = ClassLabel(
+            num_classes=len(labels_list), names=labels_list
+        )
 
         if randomize:
             chunks = np.array_split(df, max(1, len(df) // 10000))
@@ -151,12 +161,16 @@ class RiceTypeDataset(Dataset):
         max_count = max(class_counts.values())
         second_largest = sorted(class_counts.values())[-2]
 
-        class_indices = {label: np.where(labels == label)[0] for label in class_counts}
+        class_indices = {
+            label: np.where(labels == label)[0] for label in class_counts
+        }
 
         undersampled_indices = []
         for label, indices in class_indices.items():
             if class_counts[label] == max_count:
-                selected = np.random.choice(indices, size=second_largest, replace=False)
+                selected = np.random.choice(
+                    indices, size=second_largest, replace=False
+                )
                 undersampled_indices.append(selected)
             else:
                 undersampled_indices.append(indices)
@@ -195,7 +209,9 @@ class RiceTypeDataset(Dataset):
         if self.transform:
             images = self.transform(result)
         else:
-            images = self.processor(result, return_tensors="pt")["pixel_values"][0]
+            images = self.processor(result, return_tensors="pt")[
+                "pixel_values"
+            ][0]
 
         return {
             "pixel_values": images["pixel_values"][0].clone().detach(),

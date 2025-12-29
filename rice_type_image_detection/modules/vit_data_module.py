@@ -43,7 +43,9 @@ class ViTDataModule(pl.LightningDataModule):
         self.data_split_ratio = config["training"]["train_val_ratio"]
 
         self._seed = config["training"]["seed"]
-        self._generator = torch.Generator().manual_seed(config["training"]["seed"])
+        self._generator = torch.Generator().manual_seed(
+            config["training"]["seed"]
+        )
 
     @staticmethod
     def train_transforms(examples: dict[str, any]) -> dict[str, any]:
@@ -146,11 +148,11 @@ class ViTDataModule(pl.LightningDataModule):
             self._config["data_loading"]["labels2id_meta"], self.label2id
         )
 
-        self.custom_train_dataset, self.custom_test_dataset = self.train_test_split(
-            self.dataset.dataset
+        self.custom_train_dataset, self.custom_test_dataset = (
+            self.train_test_split(self.dataset.dataset)
         )
-        self.custom_train_dataset, self.custom_val_dataset = self.train_val_split(
-            self.custom_train_dataset.dataset
+        self.custom_train_dataset, self.custom_val_dataset = (
+            self.train_val_split(self.custom_train_dataset.dataset)
         )
 
     def train_dataloader(self) -> torch.utils.data.DataLoader:

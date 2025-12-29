@@ -18,7 +18,9 @@ def main(model_path: Path, images_to_analyze: Path) -> None:
         ensure_data_unpacked(model_path)
         onnx.load(model_path)
         ort_session = ort.InferenceSession(model_path)
-        with open(config["data_loading"]["id2labels_meta"]) as labels_meta_file:
+        with open(
+            config["data_loading"]["id2labels_meta"]
+        ) as labels_meta_file:
             class_names = json.load(labels_meta_file)
 
         processor = get_processor()

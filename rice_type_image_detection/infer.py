@@ -11,7 +11,9 @@ from modules.module import Module
 from utilities.model_getter import get_model
 
 
-def main(models_dir: Path, checkpoint_name: str, images_to_analyze: any) -> None:
+def main(
+    models_dir: Path, checkpoint_name: str, images_to_analyze: any
+) -> None:
     torch.set_float32_matmul_precision("medium")
     with initialize(config_path="../configs", version_base="1.1"):
         config = compose(config_name="config")

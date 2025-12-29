@@ -8,7 +8,9 @@ def get_labels_metainfo(labels_meta_path: Path) -> dict[str, any]:
         return labels_meta
 
 
-def write_labels_metainfo(labels_meta_path: Path, labels_meta: dict[str, any]) -> None:
+def write_labels_metainfo(
+    labels_meta_path: Path, labels_meta: dict[str, any]
+) -> None:
     Path(labels_meta_path).parent.mkdir(exist_ok=True)
     with open(labels_meta_path, "w") as labels_meta_file:
         json.dump(labels_meta, labels_meta_file, indent=4)

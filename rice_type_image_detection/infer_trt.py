@@ -23,9 +23,13 @@ class TensorRTInference:
         self.output_name = self.engine.get_tensor_name(1)
 
         self.tensor_info = self._setup_io_info()
-        self.name_to_idx = {name: i for i, name in enumerate(self.tensor_info.keys())}
+        self.name_to_idx = {
+            name: i for i, name in enumerate(self.tensor_info.keys())
+        }
 
-    def _setup_io_info(self) -> tp.Dict[str, tp.Dict[str, tp.Union[str, tuple]]]:
+    def _setup_io_info(
+        self,
+    ) -> tp.Dict[str, tp.Dict[str, tp.Union[str, tuple]]]:
         tensor_info = {}
         for i in range(self.engine.num_io_tensors):
             name = self.engine.get_tensor_name(i)
@@ -41,7 +45,9 @@ class TensorRTInference:
             runtime = trt.Runtime(self.logger)
             return runtime.deserialize_cuda_engine(f.read())
 
-    def infer(self, inputs: tp.Dict[str, np.ndarray]) -> tp.Dict[str, np.ndarray]:
+    def infer(
+        self, inputs: tp.Dict[str, np.ndarray]
+    ) -> tp.Dict[str, np.ndarray]:
         stream = cuda.Stream()
         output_buffers = {}
         outputs = {}
@@ -86,7 +92,9 @@ def main(model_path: Path, images_to_analyze: Path) -> None:
         config = compose(config_name="config")
         ensure_data_unpacked(model_path)
         trt_model = TensorRTInference(model_path)
-        with open(config["data_loading"]["id2labels_meta"]) as labels_meta_file:
+        with open(
+            config["data_loading"]["id2labels_meta"]
+        ) as labels_meta_file:
             class_names = json.load(labels_meta_file)
 
         processor = get_processor()
